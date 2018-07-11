@@ -43,7 +43,11 @@ class FFmpeg
 		'y'			=>	'overwrite',
 		'log'		=>	'logLevel',
 		'crf'		=>  'constantRateFactor',
-		'preset'	=>  'lossLessFactor'
+		'preset'	=>  'lossLessFactor',
+		'setdar'    =>  'setAspectRatio',
+		'framerate' => 'setFrameRate',
+		'image2'=>'setImage',
+		'scale'=>'imageScale'
 	);
 	/**
 	*	
@@ -163,7 +167,21 @@ class FFmpeg
 				}
 				$options [] = "-".$option." ".join(',',$items);
 			} else {
-				$options [] = "-".$option." ".strval($values);
+
+				if ($option == 'setdar') {
+
+					$options [] = "-vf ".$option."=".strval($values);
+
+				} if ($option == 'scale') {
+
+					$options [] = "-vf ".$option."=".strval($values);
+
+				} else {
+
+					$options [] = "-".$option." ".strval($values);
+
+				}
+				
 			}
 		}
 		$this->command = $this->ffmpeg." ".join(' ',$options). " ".$output . $this->STD;
@@ -317,10 +335,23 @@ class FFmpeg
 	*   @example    $ffmpeg->constantRateFactor('28');
 	
 	*/
+	public function imageScale( $image_scale )
+	{
+		return $this->set('scale',$image_scale,false);
+	}
+
+	/**
+	*   @param	string	$b	set constantRateFactor
+	*   @return	object
+	*   @access	public
+	*   @example    $ffmpeg->constantRateFactor('28');
+	
+	*/
 	public function constantRateFactor( $crf )
 	{
 		return $this->set('crf',$crf,false);
 	}
+
 
 	/**
 	*   @param	string	$b	set lossLessFactor
@@ -334,6 +365,43 @@ class FFmpeg
 		return $this->set('preset',$llf,false);
 	}
 
+	/**
+	*   @param	string	$setdar	set setAspectRatio
+	*   @return	object
+	*   @access	public
+	*   @example    $ffmpeg->setAspectRatio('2:4');
+	
+	*/
+	public function setAspectRatio( $setdar )
+	{
+		return $this->set('setdar',$setdar,false);
+	}
+
+	/**
+	*   @param	string	$framerate	set setFrameRate
+	*   @return	object
+	*   @access	public
+	*   @example    $ffmpeg->setFrameRate(1);
+	
+	*/
+	public function setFrameRate( $framerate )
+	{
+		return $this->set('framerate',$framerate,false);
+	}
+
+	/**
+	*   @param	string	$framerate	set setImage
+	*   @return	object
+	*   @access	public
+	*   @example    $ffmpeg->setImage(1);
+	
+	*/
+	public function setImage( $image2 = '')
+	{
+		return $this->set('f',$image2,false);
+	}
+
+	
 
 	/**
 	*   @param	string	$r	Set frame rate (Hz value, fraction or abbreviation).
