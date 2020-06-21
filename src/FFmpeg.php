@@ -172,7 +172,7 @@ class FFmpeg
 
 					$options [] = "-vf ".$option."=".strval($values);
 
-				} if ($option == 'scale') {
+				} else if ($option == 'scale') {
 
 					$options [] = "-vf ".$option."=".strval($values);
 
